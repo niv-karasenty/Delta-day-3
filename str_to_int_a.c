@@ -10,7 +10,7 @@ int main() {
     scanf("%s", str);
 
     if (number = atoi(str)) {
-        printf("The number is %d\n", number);
+        printf("The number is %d\n", number + 36);
     }
     else {
         printf("The string is not a number\n");

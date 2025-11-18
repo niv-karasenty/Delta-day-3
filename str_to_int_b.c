@@ -6,8 +6,9 @@
 int main() {
     int number = 0, temp;
     char str[100];
-    char * ptr = str;
+    char *ptr = str;
 
+    // Using fgets for no buffer overflow
     printf("Enter a number: ");
     fgets(str, 100, stdin);
 
@@ -16,15 +17,14 @@ int main() {
             printf("The number is invalid.\n");
             return 1;
         }
-        else {
-            temp = *ptr - '0';
-            number *= 10;
-            number += temp;
-        }
+        // Using the fact that chars digit are values ordered one after another where '0' is the first
+        temp = *ptr - '0';
+        number *= 10;
+        number += temp;
         ptr = ptr + 1;
     }
 
-    printf("The number is %d\n", number);
+    printf("The number is %d\n", number + 36);
 
     return 0;
 }
