@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <string.h>
 
+// Creating a new type for easier use of the types we are classifying
 enum ArrayType {
     INCREASING = 1,
     DECREASING = 2,
@@ -9,43 +10,58 @@ enum ArrayType {
     MESSED_UP = 4
 };
 
-int determine_array_type(int num_array[]) {
-    int array_type;
-    if (num_array[0] < num_array[1]) {
-        array_type = INCREASING;
-    }
-    else if (num_array[0] > num_array[1]) {
-        array_type = DECREASING;
-    }
-    else if (num_array[0] == num_array[1]) {
-        array_type = CONSTANT;
-    }
-    else {
-        return 0;
-    }
-
-    for (int i = 2; i < sizeof(num_array)/sizeof(int); i++) {
-        if (num_array[i] < num_array[i - 1] && array_type != INCREASING) {
-            return MESSED_UP;
-        }
-        else if (num_array[i] > num_array[i - 1] && array_type != DECREASING) {
-            return MESSED_UP;
-        }
-        else if (num_array[i] == num_array[i - 1] && array_type != CONSTANT) {
-            return MESSED_UP;
-        }
-    }
-    return array_type;
-}
-
 int main () {
     int num_array[15] = {};
+    int type;
     for (int i = 0; i < 15; i++) {
+        // Input of a new element
         printf("Enter number %d: ", i + 1);
         scanf("%d", &num_array[i]);
+
+        // checking the input and classifying the array type
+        if (i == 0) {
+            continue;
+        }
+        else if (i == 1) {
+            if (num_array[0] < num_array[1]) {
+                type = INCREASING;
+            }
+            if (num_array[0] > num_array[1]) {
+                type = DECREASING;
+            }
+            if (num_array[0] == num_array[1]) {
+                type = CONSTANT;
+            }
+        }
+        else {
+            // in each case of the current input we check if it stays or changes
+            switch (type) {
+                case INCREASING:
+                    if (num_array[i] < num_array[i - 1]) {
+                        type = MESSED_UP;
+                    }
+                    break;
+                case DECREASING:
+                    if (num_array[i] > num_array[i - 1]) {
+                        type = MESSED_UP;
+                    }
+                    break;
+                // Special case because it can still become increasing or decreasing
+                case CONSTANT:
+                    if (num_array[i] < num_array[i - 1]) {
+                        type = DECREASING;
+                    }
+                    else if (num_array[i] > num_array[i - 1]) {
+                        type = INCREASING;
+                    }
+                default:
+                    break;
+            }
+        }
     }
 
-    switch (determine_array_type(num_array)) {
+    // printing the type of the array
+    switch (type) {
         case INCREASING:
             printf("Increasing array\n");
             break;
